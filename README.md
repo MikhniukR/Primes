@@ -13,4 +13,8 @@ Guide to use
 
 -cnt CNT set cnt of primes
 
+-pal print only palindrome primes
+
+-sg print only Sophi Germain primes
+
 CNT and MAX should be in range [1; 4294967295] //UINT32_MAX 
