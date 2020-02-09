@@ -2,6 +2,7 @@
 #include "Primes.h"
 #include <string>
 #include <fstream>
+#include <algorithm>
 
 bool is_equals(const char *s1, std::string &s2) {
     int i = 0;
@@ -53,7 +54,7 @@ int main(int argc, char *argv[]) {
         return 0;
     }
     for(int i = 1; i < 4; i++) {
-        if (argc > i && is_equals(argv[i], "-max")) {
+        if(argc > i && is_equals(argv[i], "-max")) {
             is_max = true;
             if (argc > i + 1 && check_is_uint(argv[i + 1])) {
                 max = stoui(argv[i + 1]);
@@ -64,7 +65,7 @@ int main(int argc, char *argv[]) {
             }
             i++;
         }
-        else if (argc > i && is_equals(argv[i], "-cnt")) {
+        else if(argc > i && is_equals(argv[i], "-cnt")) {
             is_max = false;
             if (argc > i + 1 && check_is_uint(argv[i + 1])) {
                 cnt = stoui(argv[i + 1]);
@@ -75,7 +76,7 @@ int main(int argc, char *argv[]) {
             }
             i++;
         }
-        else if (argc > i && is_equals(argv[i], "-file")) {
+        else if(argc > i && is_equals(argv[i], "-file")) {
             use_file = i + 1;
             if(argc == i + 1) {
                 std::cout << "After -file should be file name" << std::endl;
@@ -90,14 +91,18 @@ int main(int argc, char *argv[]) {
     }
     Primes &primes = *new Primes(is_max ? max : cnt, is_max);
     if(!use_file) {
-        for(int i = 0; i < primes.size(); i++) {
-            std::cout << primes[i] << " ";
-        }
+        std::for_each(primes.begin(), primes.end(), [](uint32_t _p) {
+            std::cout << _p << " ";
+        });
     }
     else {
+        std::cout << "Start print primes to file" << std::endl;
         std::ofstream fout(argv[use_file]);
-        for(int i = 0; i < primes.size(); i++) {
+        for (int i = 0; i < primes.size(); i++) {
             fout << primes[i] << "\n";
+            if (i % 100000 == 0 && i != 0) {
+                std::cout << "Print first " << i << " primes to file" << std::endl;
+            }
         }
     }
     return 0;
