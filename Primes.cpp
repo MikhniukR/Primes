@@ -88,3 +88,8 @@ Iterator &Iterator::operator++() {
     index++;
     return * this;
 }
+
+Iterator &Iterator::operator--() {
+    index--;
+    return  * this;
+}

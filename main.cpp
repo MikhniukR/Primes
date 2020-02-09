@@ -4,7 +4,7 @@
 #include <fstream>
 #include <algorithm>
 
-bool is_equals(const char *s1, std::string &s2) {
+bool is_equals(const char *s1, std::string s2) {
     int i = 0;
     while(i < s2.length()) {
         if(s1[i] != s2[i]) {
@@ -89,19 +89,21 @@ int main(int argc, char *argv[]) {
             return 0;
         }
     }
+
     Primes &primes = *new Primes(is_max ? max : cnt, is_max);
     if(!use_file) {
-        std::for_each(primes.begin(), primes.end(), [](uint32_t _p) {
-            std::cout << _p << " ";
-        });
+        for(uint32_t i = 0; i < primes.size(); i++) {
+            std::cout << primes[i] << " ";
+        }
+        std::cout << std::endl;
     }
     else {
         std::cout << "Start print primes to file" << std::endl;
         std::ofstream fout(argv[use_file]);
-        for (int i = 0; i < primes.size(); i++) {
+        for(uint32_t i = 0; i < primes.size(); i++) {
             fout << primes[i] << "\n";
             if (i % 100000 == 0 && i != 0) {
-                std::cout << "Print first " << i << " primes to file" << std::endl;
+                std::cout << "Print result among first " << i << " primes to file" << std::endl;
             }
         }
     }

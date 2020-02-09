@@ -32,6 +32,7 @@ public:
     bool operator==(Iterator const& other) const;
     Iterator::reference operator*() const;
     Iterator& operator++();
+    Iterator& operator--();
 };
 
 #endif //PRIMES_PRIMES_H
