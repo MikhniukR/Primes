@@ -1,10 +1,34 @@
+/**
+\file
+\brief Console interface to use Primes
+
+    Has arguments-i only info message
+
+    -file Filename print primes to file
+
+    -max MAX set max value of primes
+
+    -cnt CNT set cnt of primes
+
+    -pal print only palindrome primes
+
+    -sg print only Sophi Germain primes
+
+ */
+
 #include <iostream>
-#include "Primes.h"
 #include <string>
 #include <fstream>
 #include <algorithm>
 #include <functional>
 
+#include "Primes.h"
+
+/**
+ * compares two string
+ * \param[in] s1 the first string
+ * \param[in] s2 the second string
+ */
 bool is_equals(const char *s1, std::string s2) {
     int i = 0;
     while(i < s2.length()) {
@@ -16,6 +40,10 @@ bool is_equals(const char *s1, std::string s2) {
     return !(i == s2.length() && s1[i] != 0);
 }
 
+/**
+ * check is string contains only digits
+ * \param[in] s string to check
+ */
 bool check_is_uint(const char *s) {
     int i = 0;
     while(s[i] != 0) {
@@ -27,10 +55,15 @@ bool check_is_uint(const char *s) {
     return true;
 }
 
+/**
+ * parse string to uint32_t
+ * \param[in] s string to parsing
+ */
 uint32_t stoui(const char *s) {
     uint32_t result = 0;
     int i = 0;
     while(s[i] != 0) {
+        ///check is overload uint32_t
         if((result * 10 + (s[i] - '0'))/10 != result) {
             std::cout << "Too big argument, should be in range 1 to " << UINT32_MAX << std::endl;
             exit(0);
@@ -43,22 +76,26 @@ uint32_t stoui(const char *s) {
 }
 
 int main(int argc, char *argv[]) {
-    bool is_max = true;
-    bool only_palindromes = false;
-    bool only_sophi_germain = false;
-    int use_file = 0;
+    bool is_max = true; /// is writing primes by max
+    bool only_palindromes = false; /// should print only palindromes
+    bool only_sophi_germain = false; /// should print only Sophi Germain primes
+    int use_file = 0; /// number of arguments that contains filename
     uint32_t max = 100, cnt = 1;
-    if (argc > 1 && is_equals(argv[1], "-i")) {
-        std::cout << "-i info message\n"
-                  << "-file Filename print primes to file\n"
-                  << "-max MAX set max value of primes\n"
-                  << "-cnt CNT set cnt of primes\n"
-                  << "CNT and MAX should be in range [1; " << UINT32_MAX << "]\n"
-                  << "-pal print only palindrome primes\n"
-                  << "-sg print only Sophi Germain primes" << std::endl;
-        return 0;
-    }
+
+    /** \defgroup <arguments_analytics> Analisate
+     * @{
+     */
     for(int i = 1; i < 5; i++) {
+        if (argc > 1 && is_equals(argv[1], "-i")) {
+            std::cout << "-i info message\n"
+                      << "-file Filename print primes to file\n"
+                      << "-max MAX set max value of primes\n"
+                      << "-cnt CNT set cnt of primes\n"
+                      << "CNT and MAX should be in range [1; " << UINT32_MAX << "]\n"
+                      << "-pal print only palindrome primes\n"
+                      << "-sg print only Sophi Germain primes" << std::endl;
+            return 0;
+        }
         if(argc > i && is_equals(argv[i], "-max")) {
             is_max = true;
             if (argc > i + 1 && check_is_uint(argv[i + 1])) {
@@ -100,8 +137,17 @@ int main(int argc, char *argv[]) {
             return 0;
         }
     }
+    /** @} */
 
-    Primes &primes = *new Primes(is_max ? max : cnt, is_max);
+    /** \defgroup <calculating> start calculating primes and write it
+     * @{
+     */
+     Primes &primes = *new Primes(is_max ? max : cnt, is_max);
+    /** @}
+     */
+    /** \defgroup <Sophi_Germain_check> lambda function to check Sophi Germain primes and should we print only thew
+     * @{
+     */
     std::function<bool(uint32_t p)> check_sophi_germain = [&primes, only_sophi_germain](uint32_t p) {
         if(!only_sophi_germain) {
             return false;
@@ -116,6 +162,10 @@ int main(int argc, char *argv[]) {
         }
         return true;
     };
+    /** @} */
+    /** \defgroup <palindrome_check> lambda function to check palindrome primes and should we print only them
+     * @{
+     */
     std::function<bool(uint32_t p)> check_palindrome = [only_palindromes](uint32_t p) {
         if(!only_palindromes) {
             return false;
@@ -140,13 +190,16 @@ int main(int argc, char *argv[]) {
         }
         return false;
     };
-
+    /** @} */
+    /** \defgroup <print> print primes
+     * @{
+     */
     if(!use_file) {
-        for(uint32_t i = 0; i < primes.size(); i++) {
-            if(check_sophi_germain(primes[i]) || check_palindrome(primes[i])) {
+        for (uint32_t prime : primes) {
+            if(check_sophi_germain(prime) || check_palindrome(prime)) {
                 continue;
             }
-            std::cout << primes[i] << " ";
+            std::cout << prime << " ";
         }
         std::cout << std::endl;
     }
@@ -163,5 +216,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    /** @} */
     return 0;
 }

@@ -3,6 +3,8 @@
 
 Для поиска простых чисел используется [блочное решето Эратосфена](https://e-maxx.ru/algo/eratosthenes_sieve#7).
 
+Documentation with doxygen
+
 Guide to use
 
 -i only info message
