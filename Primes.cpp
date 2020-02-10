@@ -75,12 +75,12 @@ uint32_t Primes::operator[](uint32_t index) {
     return data[index];
 }
 
-Iterator Primes::begin() {
-    return {this, 0};
+Iterator& Primes::begin() {
+    return *new Iterator(this, 0);
 }
 
-Iterator Primes::end() {
-    return {this, static_cast<uint32_t>(data.size())};
+Iterator& Primes::end() {
+    return *new Iterator(this, size());
 }
 
 Iterator::Iterator(Primes *primes, uint32_t index) : primes(primes), index(index){}
@@ -104,4 +104,15 @@ Iterator &Iterator::operator++() {
 Iterator &Iterator::operator--() {
     index--;
     return  * this;
+}
+
+Iterator &Iterator::operator++(int i) {
+    index += i;
+    std::cout << i << "\n";
+    return *this;
+}
+
+Iterator &Iterator::operator--(int i) {
+    index -= i;
+    return *this;
 }

@@ -28,9 +28,9 @@ public:
     ///  Get cnt of all primes
     uint32_t size();
     /// Get Iterator to the first prime
-    Iterator begin();
+    Iterator& begin();
     /// Get Iterator to the end of primes
-    Iterator end();
+    Iterator& end();
     /// Get \param index prime in container
     uint32_t operator[](uint32_t index);
 
@@ -60,6 +60,10 @@ public:
     Iterator& operator++();
     ///Previous Iterator
     Iterator& operator--();
+    ///Next Iterator
+    Iterator& operator++(int i);
+    ///Previous Iterator
+    Iterator& operator--(int i);
 };
 
 #endif //PRIMES_PRIMES_H
